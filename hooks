@@ -1,0 +1,12 @@
+run_hook() {
+    echo -n "pim gir: "
+    read -rs pim
+    echo
+    cryptsetup tcryptOpen --veracrypt-pim=$pim /dev/x root
+    if [ $? -ne 0 ]; then
+        echo "hata"
+    else
+        echo "shell açıldı"
+        /bin/sh
+    fi
+}
