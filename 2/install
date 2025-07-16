@@ -1,0 +1,43 @@
+build() {
+    add_binary "/usr/bin/cryptsetup"
+    add_binary "/usr/bin/veracrypt"
+    add_module dm_mod
+    add_module dm_crypt
+
+    # Kernel crypto API for cryptsetup
+    add_module af_alg
+    add_module algif_skcipher
+    add_module algif_hash
+    add_module cryptd
+
+    # Hash functions
+    add_module sha256_generic
+    add_module sha512_generic
+
+    # Ciphers and block modes
+    add_module aes_generic
+    add_module aesni_intel
+    add_module cbc
+    add_module xts
+    add_module ecb
+    add_module serpent_generic
+    add_module twofish_generic
+
+    add_runscript
+    add_binary /usr/bin/cryptsetup
+
+    add_file /usr/lib/libcryptsetup.so.12
+    add_file /usr/lib/libpopt.so.0
+    add_file /usr/lib/libuuid.so.1
+    add_file /usr/lib/libblkid.so.1
+    add_file /usr/lib/libc.so.6
+    add_file /usr/lib/libdevmapper.so.1.02
+    add_file /usr/lib/libcrypto.so.3
+    add_file /usr/lib/libjson-c.so.5
+    add_file /usr/lib64/ld-linux-x86-64.so.2
+    add_file /usr/lib/libudev.so.1
+    add_file /usr/lib/libm.so.6
+    add_file /usr/lib/libcap.so.2
+    add_file /usr/lib/libgcc_s.so.1
+    add_file /usr/lib/libfuse.so.2
+}
