@@ -3,7 +3,7 @@ iwctl
 station wlan0 connect AĞ_ADI
 timedatectl set-ntp true
 cfdisk /dev/sda
-pacstrap /mnt base linux linux-firmware nano efibootmgr fuse
+pacstrap /mnt base linux linux-firmware nano efibootmgr fuse dhclient busybox
 genfstab /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 ln -sf /usr/share/zoneinfo/x /etc/localtime
