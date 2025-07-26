@@ -1,4 +1,4 @@
 run_hook() {
     echo ". "
-    veracrypt --mount --filesystem=none || /bin/sh
+    veracrypt --mount --filesystem=none --slot 31 || /bin/sh
 }
