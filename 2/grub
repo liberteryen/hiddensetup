@@ -1,1 +1,1 @@
-nordrandr root=
+random.trust_cpu=0 root=/dev/mapper/veracrypt31
