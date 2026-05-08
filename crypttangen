@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Disk gir (ör: /dev/sda1 veya /dev/nvme0n1p2)
+read -rp "Disk gir (örn /dev/sda1): " DISK
+
+if [[ ! -b "$DISK" ]]; then
+    echo "Hata: disk bulunamadı -> $DISK"
+    exit 1
+fi
+
+# Disk basename (sda1 -> sda1)
+NAME="$(basename "$DISK")"
+
+# UUID al
+UUID="$(blkid -s UUID -o value "$DISK")"
+
+if [[ -z "$UUID" ]]; then
+    echo "UUID bulunamadı!"
+    exit 1
+fi
+
+# mapper adı (crypt root ismi)
+read -rp "mapper adı (default: root): " MAPPER
+MAPPER="${MAPPER:-root}"
+
+# output file
+OUT_FILE="./crypttab-${NAME}"
+
+# crypttab satırı üret
+cat > "$OUT_FILE" <<EOF
+# generated crypttab entry
+${MAPPER} UUID=${UUID} none luks
+EOF
+
+echo "Oluşturuldu: $OUT_FILE"
+cat "$OUT_FILE"
