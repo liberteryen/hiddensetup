@@ -11,7 +11,7 @@ fi
 BIN="$1"
 HOOK="$2"
 
-OUTDIR="/etc/initcpio/install"
+OUTDIR="."
 OUTFILE="${OUTDIR}/${HOOK}"
 
 if [[ ! -x "$BIN" ]]; then
