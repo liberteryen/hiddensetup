@@ -1,1 +1,1 @@
-basestrap /mnt base base-devel openrc elogind-openrc linux linux-firmware nano efibootmgr dhclient sudo xorg-server xorg-xinit
+basestrap /mnt base base-devel openrc elogind-openrc linux linux-firmware nano efibootmgr dhclient sudo xorg-server xorg-xinit xorg-twm xterm
