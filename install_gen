@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ $# -lt 2 ]]; then
+    echo "Kullanım:"
+    echo "  $0 <binary> <hook-name>"
+    exit 1
+fi
+
+BIN="$1"
+HOOK="$2"
+
+OUTDIR="/etc/initcpio/install"
+OUTFILE="${OUTDIR}/${HOOK}"
+
+if [[ ! -x "$BIN" ]]; then
+    echo "Hata: binary bulunamadı veya çalıştırılabilir değil:"
+    echo "  $BIN"
+    exit 1
+fi
+
+sudo mkdir -p "$OUTDIR"
+
+echo "Install dosyası oluşturuluyor:"
+echo "  $OUTFILE"
+
+# bağımlılıkları topla
+mapfile -t LIBS < <(
+    ldd "$BIN" | awk '
+        /=>/ {
+            if ($3 ~ /^\//)
+                print $3
+        }
+        /^\// {
+            print $1
+        }
+    ' | sort -u
+)
+
+TMP="$(mktemp)"
+
+{
+    echo "#!/bin/bash"
+    echo
+    echo "build() {"
+    echo "    add_binary \"$BIN\""
+
+    for lib in "${LIBS[@]}"; do
+        echo "    add_file \"$lib\""
+    done
+
+    echo "}"
+    echo
+    echo "help() {"
+    echo "    cat <<HELPEOF"
+    echo "Auto-generated install file for:"
+    echo "  $BIN"
+    echo "HELPEOF"
+    echo "}"
+} > "$TMP"
+
+sudo mv "$TMP" "$OUTFILE"
+sudo chmod +x "$OUTFILE"
+
+echo
+echo "Tamamlandı."
+echo
+echo "Şimdi hook dosyasını oluştur:"
+echo "  /etc/initcpio/hooks/$HOOK"
+echo
+echo "Ardından mkinitcpio.conf içine ekle:"
+echo "  HOOKS=(... $HOOK ...)"
+echo
+echo "Son olarak:"
+echo "  sudo mkinitcpio -P"
